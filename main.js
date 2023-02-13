@@ -3,7 +3,7 @@ import * as THREE from "three";
 //First set up a scene, imagine this like a movie set. you have your cameras, lights, background, and actors
 
 //Scene
-const Scene = new THREE.Scene();
+const scene = new THREE.Scene();
 
 //Create our sphere
 
@@ -19,14 +19,46 @@ const mesh = new THREE.Mesh(geometry, material); // 'mesh' it together
 //Now add to the scene and pass in the mesh
 scene.add(mesh);
 
-//Now add a camera so we can see!
+//Sizes
+
+const sizes = {
+  width: window.innerWidth,
+  height: window.innerHeight,
+};
+
+// now lets add some lights and camera so we can see!
+
+//Light
+
+//point light is an easy go to, first arg is a color
+const light = new THREE.PointLight(0xffffff, 1, 100);
+// position, basically x y z position - and + for x and y (left and right) z is in and outwards
+light.position.set(0, 10, 10);
+scene.add(light);
 
 //Camera
 //there are many types of camera, perspective camera is popular and a good start
 //Camera params: first arg is field of view, not recommended going above 50 or you get distortion like fish eye.
 //Second & third are aspect ratio 800 600 are safe but you will update this
-const camera = new THREE.PerspectiveCamera(45, 800, 600);
+// 4th and 5th, this sets a clipping point, closest you can see to farthest you can see
+const camera = new THREE.PerspectiveCamera(45, 800 / 600, 0.1, 100);
+//add camera position so scene and camera are not in the same place
+//updating the position will zoom in and out until clips or goes away - params set in camera arg
+camera.position.z = 20;
+
 //add your camera to the scene
 scene.add(camera);
 
-// now - add a canvas to you html <canvas class=""></canvas>
+// now - add a canvas to you html <canvas class="webgl"></canvas>
+
+//Renderer
+const canvas = document.querySelector(".webgl"); //canvas class
+const renderer = new THREE.WebGL1Renderer({ canvas });
+
+// now define how big your canvas will be and how it will render out
+renderer.setSize(800, 600); // this is your aspect ratio
+//now lets render the scene and camera
+renderer.render(scene, camera);
+// note: at this point, there is only a black scene the camera and scene are on top of each other. Add camera position under camera
+
+// lets make it fit the whole screen, jump up to 'sizes' ** you can now change you aspect ratio previously 800 / 600 with this variable of width and height *window
