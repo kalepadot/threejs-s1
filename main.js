@@ -1,23 +1,18 @@
-import './style.css'
-import javascriptLogo from './javascript.svg'
-import { setupCounter } from './counter.js'
+import * as THREE from "three";
 
-document.querySelector('#app').innerHTML = `
-  <div>
-    <a href="https://vitejs.dev" target="_blank">
-      <img src="/vite.svg" class="logo" alt="Vite logo" />
-    </a>
-    <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript" target="_blank">
-      <img src="${javascriptLogo}" class="logo vanilla" alt="JavaScript logo" />
-    </a>
-    <h1>Hello Vite!</h1>
-    <div class="card">
-      <button id="counter" type="button"></button>
-    </div>
-    <p class="read-the-docs">
-      Click on the Vite logo to learn more
-    </p>
-  </div>
-`
+//Scene
+const Scene = new THREE.Scene();
 
-setupCounter(document.querySelector('#counter'))
+//Create our sphere
+
+const geometry = new THREE.SphereGeometry(3, 64, 64); //3 is the radius (size) 64 and 64 are the segments width and height segments
+
+//material is how it looks, MeshStandardMaterial is how it sounds, standard mat. However, add an obj inside the argument and add you augmentations. MeshStandardMaterial( {...} )
+const material = new THREE.MeshStandardMaterial({
+  color: "#00ff83",
+});
+
+//Mesh is the combination of geometry and material, so shape and the way it looks
+const mesh = new THREE.Mesh(geometry, material); // 'mesh' it together
+//Now add to the scene and pass in the mesh
+scene.add(mesh);
