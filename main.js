@@ -16,6 +16,7 @@ const geometry = new THREE.SphereGeometry(3, 64, 64); //3 is the radius (size) 6
 //material is how it looks, MeshStandardMaterial is how it sounds, standard mat. However, add an obj inside the argument and add you augmentations. MeshStandardMaterial( {...} )
 const material = new THREE.MeshStandardMaterial({
   color: "#00ff83",
+  roughness: 0.5, //shiny bowling ball look
 });
 
 //Mesh is the combination of geometry and material, so shape and the way it looks
@@ -38,6 +39,7 @@ const sizes = {
 const light = new THREE.PointLight(0xffffff, 1, 100);
 // position, basically x y z position - and + for x and y (left and right) z is in and outwards
 light.position.set(0, 10, 10);
+light.intensity = 1.25;
 scene.add(light);
 
 //Camera
@@ -124,6 +126,8 @@ window.addEventListener("mousedown", () => (mouseDown = true)),
         150,
       ]; //this give you a value between 0 and 255 when you move your mouse along the x axis
       //animate it
+      console.log(rgb);
+
       let newColor = new THREE.Color(`rgb(${rgb.join(",")})`);
       gsap.to(mesh.material.color, {
         r: newColor.r,
@@ -132,4 +136,3 @@ window.addEventListener("mousedown", () => (mouseDown = true)),
       });
     }
   });
-console.log(rgb);
