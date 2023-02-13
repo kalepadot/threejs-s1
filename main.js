@@ -66,6 +66,7 @@ const renderer = new THREE.WebGL1Renderer({ canvas });
 // now define how big your canvas will be and how it will render out
 renderer.setSize(sizes.width, sizes.height); // this is your aspect ratio
 //now lets render the scene and camera
+renderer.setPixelRatio(2); //makes the px nicer
 renderer.render(scene, camera);
 // note: at this point, there is only a black scene the camera and scene are on top of each other. Add camera position under camera
 
