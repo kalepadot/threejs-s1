@@ -104,6 +104,7 @@ loop();
 //now lets add some orbital controls *import from THREE, see Controls above
 
 //Timeline Magic Gsap, here we can sync multiple animations
+
 const tl = gsap.timeline({ defaults: { duration: 1 } }); //default 1 second
 tl.fromTo(mesh.scale, { z: 0, x: 0, y: 0 }, { z: 1, x: 1, y: 1 }); //fade in animation, make sure everything scales at the same time
 tl.fromTo("nav", { y: "-100%" }, { y: "0%" });
@@ -112,11 +113,23 @@ tl.fromTo(".title", { opacity: 0 }, { opacity: 1 });
 //Mouse Animation Color
 
 let mouseDown = false;
-let rbg = [];
+let rgb = [];
 window.addEventListener("mousedown", () => (mouseDown = true)),
   window.addEventListener("mouseup", () => (mouseDown = false)),
   window.addEventListener("mousemove", (e) => {
     if (mouseDown) {
-      rgb = [Math.round((e.pageX / sizes.width) * 255)]; //this give you a value between 0 and 255 when you move your mouse along the x axis
+      rgb = [
+        Math.round((e.pageX / sizes.width) * 255),
+        Math.round((e.pageY / sizes.height) * 255),
+        150,
+      ]; //this give you a value between 0 and 255 when you move your mouse along the x axis
+      //animate it
+      let newColor = new THREE.Color(`rgb(${rgb.join(",")})`);
+      gsap.to(mesh.material.color, {
+        r: newColor.r,
+        g: newColor.g,
+        b: newColor.b,
+      });
     }
   });
+console.log(rgb);
