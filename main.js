@@ -11,3 +11,8 @@ const geometry = new THREE.SphereGeometry(3, 64, 64); //3 is the radius (size) 6
 const material = new THREE.MeshStandardMaterial({
   color: "#00ff83",
 });
+
+//Mesh is the combination of geometry and material, so shape and the way it looks
+const mesh = new THREE.Mesh(geometry, material); // 'mesh' it together
+//Now add to the scene and pass in the mesh
+scene.add(mesh);
