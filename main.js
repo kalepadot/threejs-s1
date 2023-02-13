@@ -1,5 +1,8 @@
 //Import Three!
 import * as THREE from "three";
+import "./style.css";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+
 //First set up a scene, imagine this like a movie set. you have your cameras, lights, background, and actors
 
 //Scene
@@ -41,7 +44,12 @@ scene.add(light);
 //Camera params: first arg is field of view, not recommended going above 50 or you get distortion like fish eye.
 //Second & third are aspect ratio 800 600 are safe but you will update this
 // 4th and 5th, this sets a clipping point, closest you can see to farthest you can see
-const camera = new THREE.PerspectiveCamera(45, 800 / 600, 0.1, 100);
+const camera = new THREE.PerspectiveCamera(
+  45,
+  sizes.width / sizes.height,
+  0.1,
+  100
+);
 //add camera position so scene and camera are not in the same place
 //updating the position will zoom in and out until clips or goes away - params set in camera arg
 camera.position.z = 20;
@@ -56,9 +64,40 @@ const canvas = document.querySelector(".webgl"); //canvas class
 const renderer = new THREE.WebGL1Renderer({ canvas });
 
 // now define how big your canvas will be and how it will render out
-renderer.setSize(800, 600); // this is your aspect ratio
+renderer.setSize(sizes.width, sizes.height); // this is your aspect ratio
 //now lets render the scene and camera
+renderer.setPixelRatio(2); //makes the px nicer
 renderer.render(scene, camera);
 // note: at this point, there is only a black scene the camera and scene are on top of each other. Add camera position under camera
 
 // lets make it fit the whole screen, jump up to 'sizes' ** you can now change you aspect ratio previously 800 / 600 with this variable of width and height *window
+
+const controls = new OrbitControls(camera, canvas);
+//add some damping - better movement when dragging responsive to how fast or slow / physics
+controls.enableDamping = true;
+//this is a website so lets disable zoom and such
+controls.enablePan = false;
+controls.enableZoom = false;
+controls.autoRotate = true;
+controls.autoRotateSpeed = 5;
+//Resize
+window.addEventListener("resize", () => {
+  //update sizes for responsive behavior
+  //this code will run every time you adjust the screen size
+  sizes.width = window.innerWidth;
+  sizes.height = window.innerHeight;
+  //Update Camera
+  camera.updateProjectionMatrix();
+  camera.aspect = sizes.width / sizes.height;
+  renderer.setSize(sizes.width, sizes.height); // these are the two we always need to update and make sure they are in sync
+});
+//we need this camera constantly re-rendering when we resize to avoid smashing our object, lets make a render loop
+const loop = () => {
+  // mesh.position.x += 0.2; you could add an animation here if you'd like .position .rotation light etc *going to use gsap
+  controls.update(); //keeps moving when you let go
+  renderer.render(scene, camera);
+  window.requestAnimationFrame(loop);
+};
+loop();
+
+//now lets add some orbital controls *import from THREE, see Controls above
