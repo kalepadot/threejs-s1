@@ -2,6 +2,7 @@
 import * as THREE from "three";
 import "./style.css";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import gsap from "gsap";
 
 //First set up a scene, imagine this like a movie set. you have your cameras, lights, background, and actors
 
@@ -15,6 +16,7 @@ const geometry = new THREE.SphereGeometry(3, 64, 64); //3 is the radius (size) 6
 //material is how it looks, MeshStandardMaterial is how it sounds, standard mat. However, add an obj inside the argument and add you augmentations. MeshStandardMaterial( {...} )
 const material = new THREE.MeshStandardMaterial({
   color: "#00ff83",
+  roughness: 0.5, //shiny bowling ball look
 });
 
 //Mesh is the combination of geometry and material, so shape and the way it looks
@@ -37,6 +39,7 @@ const sizes = {
 const light = new THREE.PointLight(0xffffff, 1, 100);
 // position, basically x y z position - and + for x and y (left and right) z is in and outwards
 light.position.set(0, 10, 10);
+light.intensity = 1.25;
 scene.add(light);
 
 //Camera
@@ -101,3 +104,35 @@ const loop = () => {
 loop();
 
 //now lets add some orbital controls *import from THREE, see Controls above
+
+//Timeline Magic Gsap, here we can sync multiple animations
+
+const tl = gsap.timeline({ defaults: { duration: 1 } }); //default 1 second
+tl.fromTo(mesh.scale, { z: 0, x: 0, y: 0 }, { z: 1, x: 1, y: 1 }); //fade in animation, make sure everything scales at the same time
+tl.fromTo("nav", { y: "-100%" }, { y: "0%" });
+tl.fromTo(".title", { opacity: 0 }, { opacity: 1 });
+
+//Mouse Animation Color
+
+let mouseDown = false;
+let rgb = [];
+window.addEventListener("mousedown", () => (mouseDown = true)),
+  window.addEventListener("mouseup", () => (mouseDown = false)),
+  window.addEventListener("mousemove", (e) => {
+    if (mouseDown) {
+      rgb = [
+        Math.round((e.pageX / sizes.width) * 255),
+        Math.round((e.pageY / sizes.height) * 255),
+        150,
+      ]; //this give you a value between 0 and 255 when you move your mouse along the x axis
+      //animate it
+      console.log(rgb);
+
+      let newColor = new THREE.Color(`rgb(${rgb.join(",")})`);
+      gsap.to(mesh.material.color, {
+        r: newColor.r,
+        g: newColor.g,
+        b: newColor.b,
+      });
+    }
+  });
