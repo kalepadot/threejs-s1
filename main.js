@@ -41,7 +41,12 @@ scene.add(light);
 //Camera params: first arg is field of view, not recommended going above 50 or you get distortion like fish eye.
 //Second & third are aspect ratio 800 600 are safe but you will update this
 // 4th and 5th, this sets a clipping point, closest you can see to farthest you can see
-const camera = new THREE.PerspectiveCamera(45, 800 / 600, 0.1, 100);
+const camera = new THREE.PerspectiveCamera(
+  45,
+  sizes.width / sizes.height,
+  0.1,
+  100
+);
 //add camera position so scene and camera are not in the same place
 //updating the position will zoom in and out until clips or goes away - params set in camera arg
 camera.position.z = 20;
@@ -56,7 +61,7 @@ const canvas = document.querySelector(".webgl"); //canvas class
 const renderer = new THREE.WebGL1Renderer({ canvas });
 
 // now define how big your canvas will be and how it will render out
-renderer.setSize(800, 600); // this is your aspect ratio
+renderer.setSize(sizes.width, sizes.height); // this is your aspect ratio
 //now lets render the scene and camera
 renderer.render(scene, camera);
 // note: at this point, there is only a black scene the camera and scene are on top of each other. Add camera position under camera
