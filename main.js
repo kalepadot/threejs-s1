@@ -75,4 +75,14 @@ window.addEventListener("resize", () => {
   //this code will run every time you adjust the screen size
   sizes.width = window.innerWidth;
   sizes.height = window.innerHeight;
+  //Update Camera
+  camera.updateProjectionMatrix();
+  camera.aspect = sizes.width / sizes.height;
+  renderer.setSize(sizes.width, sizes.height); // these are the two we always need to update and make sure they are in sync
 });
+//we need this camera constantly re-rendering when we resize to avoid smashing our object, lets make a render loop
+const loop = () => {
+  renderer.render(scene, camera);
+  window.requestAnimationFrame(loop);
+};
+loop();
