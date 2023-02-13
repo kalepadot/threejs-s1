@@ -1,5 +1,6 @@
 //Import Three!
 import * as THREE from "three";
+import "./style.css";
 //First set up a scene, imagine this like a movie set. you have your cameras, lights, background, and actors
 
 //Scene
@@ -67,3 +68,11 @@ renderer.render(scene, camera);
 // note: at this point, there is only a black scene the camera and scene are on top of each other. Add camera position under camera
 
 // lets make it fit the whole screen, jump up to 'sizes' ** you can now change you aspect ratio previously 800 / 600 with this variable of width and height *window
+
+//Resize
+window.addEventListener("resize", () => {
+  //update sizes for responsive behavior
+  //this code will run every time you adjust the screen size
+  sizes.width = window.innerWidth;
+  sizes.height = window.innerHeight;
+});
